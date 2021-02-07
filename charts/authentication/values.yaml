@@ -1,0 +1,29 @@
+# Default values for authentication chart
+
+# Application Settings
+applicationPort: 5000
+restartPolicy: Always
+secretName: ss-authentication
+namespace: studysnap-authentication
+
+# Application Image Settings
+image:
+  name: studysnap/authentication
+  pullPolicy: Always
+  port: 5555
+  env:
+    maxRequests: 250
+    bcryptSaltRounds: 12
+    dbDialect: postgres
+    dbHost: localhost
+    dbPort: 5432
+    dbRetryAttempts: 5
+    jwtAccessExpireTime: 5m
+
+
+# Expose service settings
+service:
+  type: NodePort
+
+# Override the resource configuration for read replicas
+resources: {}

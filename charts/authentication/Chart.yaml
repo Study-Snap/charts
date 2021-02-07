@@ -1,0 +1,12 @@
+apiVersion: v2
+name: authentication
+description: A Helm chart for StudySnap's Authentication Server
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+
+# Deployment dependencies (uses our own postgres deployment)
+dependencies:
+  - name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.2.7
