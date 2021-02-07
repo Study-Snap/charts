@@ -60,3 +60,10 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Get the host DNS name for the postgres database instance
+*/}}
+{{- define "postgresql.fullname" -}}
+{{- printf "%s-userdb.%s.svc.cluster.local" .Values.namespace .Values.namespace | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

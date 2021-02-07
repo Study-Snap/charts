@@ -35,7 +35,7 @@ spec:
             - name: DB_DIALECT
               value: "{{ .Values.image.env.dbDialect | default "postgres" }}"
             - name: DB_HOST
-              value: "{{ .Values.image.env.dbHost | default "db.studysnap.ca" }}"
+              value: "{{ include "postgresql.fullname" . }}"
             - name: DB_PORT
               value: "{{ .Values.image.env.dbPort | default "5432" }}"
             - name: DB_USER_DATABASE
@@ -72,8 +72,5 @@ spec:
   selector:
     app: {{ include "authentication.fullname" . }}
   ports:
-    - port: {{ .Values.applicationPort }}
+    - port: {{ .Values.service.port }}
       targetPort: {{ .Values.image.port }}
-
-
-# Missing: Volumes

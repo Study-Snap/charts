@@ -1,10 +1,9 @@
 # Default values for authentication chart
 
 # Application Settings
-applicationPort: 5000
 restartPolicy: Always
 secretName: ss-authentication
-namespace: studysnap-authentication
+namespace: studysnap
 
 # Application Image Settings
 image:
@@ -23,7 +22,8 @@ image:
 
 # Expose service settings
 service:
-  type: NodePort
+  type: ClusterIP
+  port: 5000
 
 # Override the resource configuration for read replicas
 resources: {}
