@@ -3,12 +3,12 @@ entries:
   authentication:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2021-02-08T00:16:32.597868978Z"
+    created: "2021-02-08T00:21:26.696756748Z"
     description: A Helm chart for StudySnap's Authentication Server
-    digest: 697e7da876d69b9d420264362ec03ba83ed0d48c97f0fdc698c02b727af2f1df
+    digest: 4493ee1f9ff49fc8f01ff75abe54c3168353d08a2fc670333a75838db91f09cf
     name: authentication
     type: application
     urls:
     - https://github.com/Study-Snap/charts/releases/download/authentication-0.1.0/authentication-0.1.0.tgz
     version: 0.1.0
-generated: "2021-02-08T00:16:32.389643367Z"
+generated: "2021-02-08T00:21:26.599730212Z"
