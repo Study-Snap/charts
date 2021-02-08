@@ -2,8 +2,9 @@ apiVersion: v2
 name: authentication
 description: A Helm chart for StudySnap's Authentication Server
 home: studysnap.ca
-maintainers:
-  - Ben Sykes
+Maintainer: Ben Sykes
+
+# Chart Info (versions)
 type: application
 version: 0.1.1
 appVersion: "0.1.0"
