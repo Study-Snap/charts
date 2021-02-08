@@ -43,25 +43,6 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-Selector labels
-*/}}
-{{- define "authentication.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "authentication.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "authentication.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "authentication.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}
-
-{{/*
 Get the host DNS name for the postgres database instance
 */}}
 {{- define "postgresql.fullname" -}}
