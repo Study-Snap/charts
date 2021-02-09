@@ -25,5 +25,12 @@ service:
   type: ClusterIP
   port: 5000
 
+# Let's Encrypt Settings (SSL)
+ingress:
+  host: studysnap.ca
+  certManager:
+    clusterIssuer: letsencrypt-prod
+    tlsSecretName: ss-authentication-tls
+
 # Override the resource configuration for read replicas
 resources: {}
