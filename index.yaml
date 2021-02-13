@@ -3,6 +3,25 @@ entries:
   authentication:
   - apiVersion: v2
     appVersion: 0.x
+    created: "2021-02-13T17:12:33.478306078Z"
+    dependencies:
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.3.1
+    description: A Helm chart for StudySnap's Authentication Server
+    digest: c201c7c29f145d9d3cf87e915b115725e6509251f6129a603f3d3085c213cc89
+    home: studysnap.ca
+    maintainers:
+    - email: ben@sykesdev.ca
+      name: Ben Sykes
+      url: https://sykesdev.ca
+    name: authentication
+    type: application
+    urls:
+    - https://github.com/Study-Snap/charts/releases/download/authentication-1.0.2/authentication-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: 0.x
     created: "2021-02-10T01:34:34.820903441Z"
     description: A Helm chart for StudySnap's Authentication Server
     digest: 0fa888f285af3927db9d85960defb96272091dce6a988a54bceeed474494b792
