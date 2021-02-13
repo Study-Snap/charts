@@ -9,5 +9,11 @@ maintainers:
 
 # Chart Info (versions)
 type: application
-version: 1.0.1
+version: 1.0.2
 appVersion: "0.x"
+
+# Chart Dependencies
+dependencies:
+  - name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.3.1

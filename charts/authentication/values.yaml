@@ -14,7 +14,6 @@ image:
     maxRequests: 250
     bcryptSaltRounds: 12
     dbDialect: postgres
-    dbHost: localhost
     dbPort: 5432
     dbRetryAttempts: 5
     jwtAccessExpireTime: 5m
@@ -34,3 +33,16 @@ ingress:
 
 # Override the resource configuration for read replicas
 resources: {}
+
+# OVERRIDE POSTGRESQL VALUES (in dependency)
+postgresql:
+  fullnameOverride: studysnap-userdb
+  global:
+    postgresql:
+      servicePort: 5432
+      postgresqlDatabase: studysnap_userdb # Note: This should match charts/authentication/values.yaml
+  postgresqlUsername: studysnap
+  existingSecret: ss-authentication
+  service:
+    type: ClusterIP
+    port: 5432
