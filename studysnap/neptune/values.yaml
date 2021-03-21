@@ -1,0 +1,47 @@
+# Default values for neptune chart
+
+# Application Settings
+secretName: ss-neptune
+namespace: studysnap
+
+# Application Image Settings
+image:
+  name: studysnap/neptune
+  pullPolicy: Always
+  restartPolicy: Always
+  port: 7777
+  env:
+    maxRequests: 400
+    dbUsername: studysnap
+    dbDialect: postgres
+    dbNoteDatabase: studysnap_notedb
+    dbPort: 6543  
+
+
+# Expose service settings
+service:
+  type: ClusterIP
+  port: 6000
+
+# Let's Encrypt Settings (SSL)
+ingress:
+  host: studysnap.ca
+  certManager:
+    clusterIssuer: letsencrypt-prod
+    tlsSecretName: ss-neptune-tls
+
+# Override the resource configuration for read replicas
+resources: {}
+
+# OVERRIDE POSTGRESQL VALUES (in dependency)
+postgresql:
+  fullnameOverride: studysnap-notedb
+  global:
+    postgresql:
+      servicePort: 5432
+      postgresqlDatabase: studysnap_notedb # Note: This should match charts/neptune/values.yaml
+  postgresqlUsername: studysnap
+  existingSecret: ss-neptune
+  service:
+    type: ClusterIP
+    port: 6543
