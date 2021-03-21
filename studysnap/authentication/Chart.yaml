@@ -1,0 +1,19 @@
+apiVersion: v2
+name: authentication
+description: A Helm chart for StudySnap's Authentication Server
+home: studysnap.ca
+maintainers: 
+  - name: Ben Sykes
+    email: ben@sykesdev.ca
+    url: https://sykesdev.ca
+
+# Chart Info (versions)
+type: application
+version: 1.0.4
+appVersion: "1.x"
+
+# Chart Dependencies
+dependencies:
+  - name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.3.1
