@@ -3,6 +3,25 @@ entries:
   authentication:
   - apiVersion: v2
     appVersion: 1.x
+    created: "2021-03-22T16:05:52.093016101Z"
+    dependencies:
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.3.1
+    description: A Helm chart for StudySnap's Authentication Server
+    digest: 018c431870e13097f070f69e566ca92c14f3e7aa7722856d687d4d5bd31b48e7
+    home: studysnap.ca
+    maintainers:
+    - email: ben@sykesdev.ca
+      name: Ben Sykes
+      url: https://sykesdev.ca
+    name: authentication
+    type: application
+    urls:
+    - https://github.com/Study-Snap/charts/releases/download/authentication-1.0.5/authentication-1.0.5.tgz
+    version: 1.0.5
+  - apiVersion: v2
+    appVersion: 1.x
     created: "2021-03-21T18:53:47.86899043Z"
     dependencies:
     - name: postgresql
@@ -123,6 +142,28 @@ entries:
   neptune:
   - apiVersion: v2
     appVersion: 0.x
+    created: "2021-03-22T16:05:52.264214948Z"
+    dependencies:
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.3.1
+    - name: authentication
+      repository: https://study-snap.github.io/charts/
+      version: 1.0.4
+    description: A Helm chart for StudySnap's neptune resource server
+    digest: bf31b71642b5323f79b1cd12fb375f5679189098e333ec1b48ce708a8ff9e2bf
+    home: studysnap.ca
+    maintainers:
+    - email: ben@sykesdev.ca
+      name: Ben Sykes
+      url: https://sykesdev.ca
+    name: neptune
+    type: application
+    urls:
+    - https://github.com/Study-Snap/charts/releases/download/neptune-0.1.2/neptune-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 0.x
     created: "2021-03-21T18:58:04.189393994Z"
     dependencies:
     - name: postgresql
@@ -165,4 +206,4 @@ entries:
     urls:
     - https://github.com/Study-Snap/charts/releases/download/neptune-0.1.0/neptune-0.1.0.tgz
     version: 0.1.0
-generated: "2021-03-21T18:58:04.189424294Z"
+generated: "2021-03-22T16:05:52.264266851Z"
