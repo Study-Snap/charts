@@ -1,3 +1,4 @@
+# APPLICATION DEPLOYMENT CONFIG
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,6 +22,10 @@ spec:
         app: {{ include "neptune.fullname" . }}
     spec:
       restartPolicy: {{ .Values.image.restartPolicy }}
+      volumes:
+        - name: {{ include "neptune.fullname" . }}-persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ include "neptune.fullname" . }}-pvc
       containers:
         - name: {{ include "neptune.fullname" . }}
           image: "{{ .Values.image.name }}:{{ .Chart.AppVersion }}"
@@ -40,6 +45,8 @@ spec:
               value: "{{ .Values.image.env.dbNoteDatabase | default "studysnap_notedb" }}"
             - name: DB_RETRY_ATTEMPTS
               value: "{{ .Values.image.env.dbRetryAttempts | default "2" }}"
+            - name: FILE_STORE
+              value: "{{ .Values.image.env.fileStore | default "/files/" }}"
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
@@ -57,8 +64,12 @@ spec:
                   key: JWT_SECRET
           ports:
             - containerPort: {{ .Values.image.port }}
+          volumeMounts:
+            - name: {{ include "neptune.fullname" . }}-persistent-storage
+              mountPath: "{{ .Values.image.env.fileStore | default "/files/" }}"
           resources: {{- toYaml .Values.resources | nindent 12 }}
 ---
+# SERVICE TO EXPOSE APPLICATION
 apiVersion: v1
 kind: Service
 metadata:
@@ -72,3 +83,18 @@ spec:
     - name: http
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.image.port }}
+---
+# PVC STORAGE USED FOR FILES
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: {{ include "neptune.fullname" . }}-pvc
+    labels:
+        app: {{ include "neptune.fullname" . }}
+spec:
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+            storage: {{ .Values.pvc.size }}
+    storageClassName: {{ .Values.pvc.storageClass }}

@@ -15,7 +15,8 @@ image:
     dbUsername: studysnap
     dbDialect: postgres
     dbNoteDatabase: studysnap_notedb
-    dbPort: 6543  
+    dbPort: 6543
+    fileStore: /files/
 
 
 # Expose service settings
@@ -29,6 +30,11 @@ ingress:
   certManager:
     clusterIssuer: letsencrypt-prod
     tlsSecretName: ss-neptune-tls
+
+# PVC
+pvc:
+  size: 8Gi
+  storageClass: do-block-storage
 
 # Override the resource configuration for read replicas
 resources: {}
