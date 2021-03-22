@@ -15,7 +15,7 @@ image:
     dbUsername: studysnap
     dbDialect: postgres
     dbNoteDatabase: studysnap_notedb
-    dbPort: 6543
+    dbPort: 5432
     fileStore: /files/
 
 
@@ -50,4 +50,18 @@ postgresql:
   existingSecret: ss-neptune
   service:
     type: ClusterIP
-    port: 6543
+    port: 5432
+
+# OVERRIDE AUTHENTICATIONs POSTGRESQL VALUES (authentication dep)
+authentication:
+  postgresql:
+    fullnameOverride: studysnap-userdb
+    global:
+      postgresql:
+        servicePort: 5432
+        postgresqlDatabase: studysnap_userdb # Note: This should match charts/authentication/values.yaml
+    postgresqlUsername: studysnap
+    existingSecret: ss-authentication
+    service:
+      type: ClusterIP
+      port: 5432

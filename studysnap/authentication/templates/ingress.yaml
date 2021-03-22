@@ -15,7 +15,7 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: /auth/api
+          - path: /auth
             pathType: Prefix
             backend:
               service:
