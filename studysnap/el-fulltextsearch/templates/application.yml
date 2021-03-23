@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "el-fulltextsearch.fullname" . }}-deployment
+  name: {{ include "el-fulltextsearch.fullname" . }}-logstash-deployment
   namespace: {{ .Values.defaultNamespace }}
   labels:
     app: {{ include "el-fulltextsearch.fullname" . }}
@@ -22,12 +22,20 @@ spec:
     spec:
       restartPolicy: {{ .Values.restartPolicy }}
       containers:
-        - name: {{ include "el-fulltextsearch.fullname" . }}
-          image: "{{ .Values.image.name }}:{{ .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
+        - name: {{ .Release.Name }}-logstash
+          image: "{{ .Values.logstash.image.name }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.logstash.image.pullPolicy | default "Always" }}
           env:
-            - name: JWT_ACCESS_TOKEN_EXPIRE_TIME
-              value: "{{ .Values.image.env.jwtAccessExpireTime | default "10m" }}"
+            - name: DB_HOST
+              value: "{{ include "postgresql.fullname" }}"
+            - name: DB_PORT
+              value: {{ .Values.database.port }}
+            - name: DB_NAME
+              value: "{{ .Values.database.name }}"
+            - name: ES_HOST
+              value: "{{ include "elasticsearch.fullname" }}"
+            - name: ES_PORT
+              value: {{ .Values.elasticsearch.port }}
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
@@ -44,7 +52,7 @@ spec:
                   name: {{ .Values.secretName }}
                   key: JWT_SECRET
           ports:
-            - containerPort: {{ .Values.image.port }}
+            - containerPort: {{ .Values.logstash.image.port }}
           volumes:
             - name: {{ include "el-fulltextsearch.fullname" . }}-cmv
               configMap:
@@ -56,18 +64,4 @@ spec:
                     path: /usr/share/logstash/config/pipelines.yml
                   - key: note_pipeline
                     path: /usr/share/logstash/pipeline/notes.conf
-          resources: {{- toYaml .Values.resources | nindent 12 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "authentication.fullname" . }}-service
-  namespace: {{ .Values.namespace }}
-spec:
-  type: {{ .Values.service.type | default "NodePort" }}
-  selector:
-    app: {{ include "authentication.fullname" . }}
-  ports:
-    - name: http
-      port: {{ .Values.service.port }}
-      targetPort: {{ .Values.image.port }}
+          resources: {{- toYaml .Values.logstash.resources | nindent 12 }}
