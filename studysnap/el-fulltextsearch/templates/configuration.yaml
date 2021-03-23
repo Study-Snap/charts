@@ -1,0 +1,9 @@
+apiVersion: v2
+kind: ConfigMap
+metadata:
+  name: {{ include "el-fulltextsearch.fullname" }}-cm
+  namespace: {{ .Values.defaultNamespace }}
+data:
+  logstash_conf: {{ tpl (.Files.Get "files/config/logstash.yml") . | quote }}
+  pipelines_conf: {{ tpl (.Files.Get "files/config/pipelines.yml") . | quote }}
+  note_pipeline: {{ tpl (.Files.Get "files/pipelines/notes.conf") . | quote }}

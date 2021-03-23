@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "el-fulltextsearch.fullname" . }}-deployment
+  namespace: {{ .Values.defaultNamespace }}
+  labels:
+    app: {{ include "el-fulltextsearch.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "el-fulltextsearch.fullname" . }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 45
+  template:
+    metadata:
+      labels:
+        app: {{ include "el-fulltextsearch.fullname" . }}
+    spec:
+      restartPolicy: {{ .Values.restartPolicy }}
+      containers:
+        - name: {{ include "el-fulltextsearch.fullname" . }}
+          image: "{{ .Values.image.name }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
+          env:
+            - name: JWT_ACCESS_TOKEN_EXPIRE_TIME
+              value: "{{ .Values.image.env.jwtAccessExpireTime | default "10m" }}"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: DB_USER
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: DB_PASS
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: JWT_SECRET
+          ports:
+            - containerPort: {{ .Values.image.port }}
+          volumes:
+            - name: {{ include "el-fulltextsearch.fullname" . }}-cmv
+              configMap:
+                name: "logstash-configmap-{{ .Release.Name }}"
+                items:
+                  - key: logstash_conf
+                    path: /usr/share/logstash/config/logstash.yml
+                  - key: pipelines_conf
+                    path: /usr/share/logstash/config/pipelines.yml
+                  - key: note_pipeline
+                    path: /usr/share/logstash/pipeline/notes.conf
+          resources: {{- toYaml .Values.resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "authentication.fullname" . }}-service
+  namespace: {{ .Values.namespace }}
+spec:
+  type: {{ .Values.service.type | default "NodePort" }}
+  selector:
+    app: {{ include "authentication.fullname" . }}
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.image.port }}
