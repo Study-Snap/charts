@@ -1,9 +1,21 @@
-apiVersion: v2
+# Template logstash configuration files
+apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "el-fulltextsearch.fullname" }}-cm
+  name: {{ include "el-fulltextsearch.fullname" . }}-lscm
   namespace: {{ .Values.defaultNamespace }}
 data:
-  logstash_conf: {{ tpl (.Files.Get "files/config/logstash.yml") . | quote }}
-  pipelines_conf: {{ tpl (.Files.Get "files/config/pipelines.yml") . | quote }}
-  note_pipeline: {{ tpl (.Files.Get "files/pipelines/notes.conf") . | quote }}
+  logstash.yml: {{ tpl (.Files.Get "files/config/logstash.yml") . | quote }}
+  pipelines.yml: {{ tpl (.Files.Get "files/config/pipelines.yml") . | quote }}
+  notes.yml: {{ tpl (.Files.Get "files/pipelines/notes.conf") . | quote }}
+
+---
+# ElasticSearch Service Configuration
+# Note: Name was hard-coded since values cannot be templated for override.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: el-fulltextsearch-escm
+  namespace: {{ .Values.defaultNamespace }}
+data:
+  "discovery.type": single-node

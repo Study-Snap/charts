@@ -1,0 +1,41 @@
+# Default values for the chart
+
+# Application (global) values
+defaultNamespace: studysnap
+restartPolicy: Always
+secretName: ss-search
+
+logstash:
+  host: "0.0.0.0"
+  image:
+    name: studysnap/logstash-pg-es
+    tag: 1.x
+    pullPolicy: Always
+  resources: {}
+
+database:
+  name: studysnap_notedb
+  port: 5432
+
+es:
+  port: 9200
+
+# OVERRIDE ELASTICSEARCH CHART VALUES (if needed)
+elasticsearch:
+  replicas: 1
+  minimumMasterNodes: 1
+  resources:
+    requests:
+      cpu: "1000m"
+      memory: "1Gi"
+    limits:
+      cpu: "1000m"
+      memory: "1Gi"
+  volumeClaimTemplate:
+    resources:
+      requests:
+        storage: 5Gi
+
+  # envFrom:
+  #   - configMapRef:
+  #       name: config-map
