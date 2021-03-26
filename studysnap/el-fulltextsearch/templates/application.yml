@@ -22,18 +22,12 @@ spec:
     spec:
       restartPolicy: {{ .Values.restartPolicy }}
       volumes:
-          - name: {{ include "el-fulltextsearch.fullname" . }}-lscmv
-            # configMap:
-            #   name: "{{ include "el-fulltextsearch.fullname" . }}-lscm"
+          - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-lsv
             configMap:
-              name: "{{ include "el-fulltextsearch.fullname" . }}-lscm"
-              items:
-                - key: logstash.yml
-                  path: logstash.yml
-                - key: pipelines.yml
-                  path: pipelines.yml
-                - key: notes.yml
-                  path: notes.yml
+              name: "{{ include "el-fulltextsearch.fullname" . }}-lscm-ls"
+          - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-plv
+            configMap:
+              name: "{{ include "el-fulltextsearch.fullname" . }}-lscm-pl"
       containers:
         - name: {{ .Release.Name }}-logstash
           image: "{{ .Values.logstash.image.name }}:{{ .Values.logstash.image.tag }}"
@@ -49,6 +43,8 @@ spec:
               value: "{{ include "elasticsearch.fullname" . }}"
             - name: ES_PORT
               value: "{{ .Values.es.port }}"
+            - name: LS_HOST
+              value: "{{ .Values.logstash.host }}"
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
@@ -60,8 +56,8 @@ spec:
                   name: {{ .Values.secretName }}
                   key: DB_PASS
           volumeMounts:
-            - name: {{ include "el-fulltextsearch.fullname" . }}-lscmv
-              mountPath: /usr/share/logstash/config/logstash.yml
-              subPath: logstash.yml
-
+            - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-lsv
+              mountPath: /usr/share/logstash/config/
+            - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-plv
+              mountPath: /usr/share/logstash/pipeline/
           resources: {{- toYaml .Values.logstash.resources | nindent 12 }}
