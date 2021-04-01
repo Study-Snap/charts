@@ -59,5 +59,6 @@ spec:
             - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-lsv
               mountPath: /usr/share/logstash/config/
             - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-plv
-              mountPath: /usr/share/logstash/pipeline/
+              mountPath: /usr/share/logstash/pipeline/notes.conf
+              subPath: notes.conf
           resources: {{- toYaml .Values.logstash.resources | nindent 12 }}

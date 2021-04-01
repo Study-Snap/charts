@@ -15,7 +15,7 @@ metadata:
   name: {{ include "el-fulltextsearch.fullname" . }}-lscm-pl
   namespace: {{ .Values.defaultNamespace }}
 data:
-  notes.yml: {{ tpl (.Files.Get "files/pipelines/notes.conf") . | quote }}
+  notes.conf: {{ tpl (.Files.Get "files/pipelines/notes.conf") . | quote }}
 ---
 # ElasticSearch Service Configuration
 # Note: Name was hard-coded since values cannot be templated for override.
@@ -26,3 +26,13 @@ metadata:
   namespace: {{ .Values.defaultNamespace }}
 data:
   discovery.type: single-node
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-config
+  namespace: {{ .Values.defaultNamespace }}
+data:
+  elasticsearch.yaml: |
+    discovery.type: single-node
