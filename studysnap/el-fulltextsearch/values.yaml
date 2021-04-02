@@ -7,6 +7,9 @@ secretName: ss-neptune
 
 logstash:
   host: "0.0.0.0"
+  secretName: ss-logstash
+  secretPath: "/run/secrets/kubernetes.io/studysnap"
+  secretGroup: "logstash/jdbcpassword"
   image:
     name: studysnap/logstash-pg-es
     tag: 1.x

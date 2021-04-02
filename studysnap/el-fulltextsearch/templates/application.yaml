@@ -28,6 +28,12 @@ spec:
           - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-plv
             configMap:
               name: "{{ include "el-fulltextsearch.fullname" . }}-lscm-pl"
+          - name: "{{ include "el-fulltextsearch.fullname" . }}-lspassv"
+            secret:
+              secretName: "{{ .Values.logstash.secretName }}"
+              items:
+                - key: jdbc-password
+                  path: "{{ .Values.logstash.secretGroup }}"
       containers:
         - name: {{ .Release.Name }}-logstash
           image: "{{ .Values.logstash.image.name }}:{{ .Values.logstash.image.tag }}"
@@ -61,4 +67,7 @@ spec:
             - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-plv
               mountPath: /usr/share/logstash/pipeline/notes.conf
               subPath: notes.conf
+            - name: "{{ include "el-fulltextsearch.fullname" . }}-lspassv"
+              mountPath: "{{ .Values.logstash.secretPath }}"
+              readOnly: true
           resources: {{- toYaml .Values.logstash.resources | nindent 12 }}
