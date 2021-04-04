@@ -1,0 +1,15 @@
+apiVersion: v2
+name: el-fulltextsearch
+description: A Helm chart to deploy a fulltext search elastic search index that is synchronized with logstash to postgres database
+
+# Application details
+type: application
+version: 0.2.0
+appVersion: "1.x"
+
+
+# Chart Dependencies
+dependencies:
+  - name: elasticsearch
+    repository: https://helm.elastic.co
+    version: 7.11.2

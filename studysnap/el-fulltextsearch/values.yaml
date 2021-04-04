@@ -1,0 +1,49 @@
+# Default values for the chart
+
+# Application (global) values
+defaultNamespace: studysnap
+restartPolicy: Always
+secretName: ss-neptune
+
+logstash:
+  host: "0.0.0.0"
+  secretName: ss-logstash
+  secretPath: "/run/secrets/kubernetes.io/studysnap"
+  secretGroup: "logstash/jdbcpassword"
+  image:
+    name: studysnap/logstash-pg-es
+    tag: 1.x
+    pullPolicy: Always
+  resources: {}
+
+database:
+  name: studysnap_notedb
+  port: 5432
+
+es:
+  port: 9200
+
+# OVERRIDE ELASTICSEARCH CHART VALUES (if needed)
+elasticsearch:
+  replicas: 1
+  imageTag: 7.11.2
+  esJavaOpts: "-Xms512m -Xmx512m"
+  resources:
+    requests:
+      cpu: "1000m"
+      memory: "1Gi"
+    limits:
+      cpu: "1000m"
+      memory: "2Gi"
+  extraVolumes:
+    - name: elasticsearch-configv
+      configMap:
+        name: elasticsearch-config
+  extraVolumeMounts:
+    - name: elasticsearch-configv
+      mountPath: /etc/elasticsearch/elasticsearch.yaml
+      subPath: elasticsearch.yaml
+  volumeClaimTemplate:
+    resources:
+      requests:
+        storage: 5Gi

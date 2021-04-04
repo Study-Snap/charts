@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "el-fulltextsearch.fullname" . }}-deployment
+  namespace: {{ .Values.defaultNamespace }}
+  labels:
+    app: {{ include "el-fulltextsearch.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "el-fulltextsearch.fullname" . }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 45
+  template:
+    metadata:
+      labels:
+        app: {{ include "el-fulltextsearch.fullname" . }}
+    spec:
+      restartPolicy: {{ .Values.restartPolicy }}
+      volumes:
+          - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-lsv
+            configMap:
+              name: "{{ include "el-fulltextsearch.fullname" . }}-lscm-ls"
+          - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-plv
+            configMap:
+              name: "{{ include "el-fulltextsearch.fullname" . }}-lscm-pl"
+          - name: "{{ include "el-fulltextsearch.fullname" . }}-lspassv"
+            secret:
+              secretName: "{{ .Values.logstash.secretName }}"
+              items:
+                - key: jdbc-password
+                  path: "{{ .Values.logstash.secretGroup }}"
+      containers:
+        - name: {{ .Release.Name }}-logstash
+          image: "{{ .Values.logstash.image.name }}:{{ .Values.logstash.image.tag }}"
+          imagePullPolicy: {{ .Values.logstash.image.pullPolicy | default "Always" }}
+          env:
+            - name: DB_HOST
+              value: "{{ include "postgresql.fullname" . }}"
+            - name: DB_PORT
+              value: "{{ .Values.database.port }}"
+            - name: DB_NAME
+              value: "{{ .Values.database.name }}"
+            - name: ES_HOST
+              value: "{{ include "elasticsearch.fullname" . }}"
+            - name: ES_PORT
+              value: "{{ .Values.es.port }}"
+            - name: LS_HOST
+              value: "{{ .Values.logstash.host }}"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: DB_USER
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: DB_PASS
+          volumeMounts:
+            - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-lsv
+              mountPath: /usr/share/logstash/config/
+            - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-plv
+              mountPath: /usr/share/logstash/pipeline/notes.conf
+              subPath: notes.conf
+            - name: "{{ include "el-fulltextsearch.fullname" . }}-lspassv"
+              mountPath: "{{ .Values.logstash.secretPath }}"
+              readOnly: true
+          resources: {{- toYaml .Values.logstash.resources | nindent 12 }}

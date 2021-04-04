@@ -37,7 +37,13 @@ pvc:
   storageClass: do-block-storage
 
 # Override the resource configuration for read replicas
-resources: {}
+resources:
+  requests:
+    cpu: "500m"
+    memory: "512Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
 
 # OVERRIDE POSTGRESQL VALUES (in dependency)
 postgresql:
@@ -54,6 +60,7 @@ postgresql:
 
 # OVERRIDE AUTHENTICATIONs POSTGRESQL VALUES (authentication dep)
 authentication:
+  secretName: ss-authentication
   postgresql:
     fullnameOverride: studysnap-userdb
     global:
