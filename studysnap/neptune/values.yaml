@@ -48,6 +48,12 @@ resources:
 # OVERRIDE POSTGRESQL VALUES (in dependency)
 postgresql:
   fullnameOverride: studysnap-notedb
+  startupProbe:
+    enabled: false
+  volumePermissions:
+    enabled: true
+  image:
+    debug: true
   global:
     postgresql:
       servicePort: 5432
@@ -61,6 +67,13 @@ postgresql:
 # OVERRIDE AUTHENTICATIONs POSTGRESQL VALUES (authentication dep)
 authentication:
   secretName: ss-authentication
+  # TEMP (Disable startup probe)
+  startupProbe:
+    enabled: false
+  volumePermissions:
+    enabled: true
+  image:
+    debug: true
   postgresql:
     fullnameOverride: studysnap-userdb
     global:
