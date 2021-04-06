@@ -37,6 +37,10 @@ resources: {}
 # OVERRIDE POSTGRESQL VALUES (in dependency)
 postgresql:
   fullnameOverride: studysnap-userdb
+  startupProbe:
+    enabled: false
+  volumePermissions:
+    enabled: true
   global:
     postgresql:
       servicePort: 5432
