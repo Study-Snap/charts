@@ -26,6 +26,13 @@ spec:
         - name: {{ include "neptune.fullname" . }}-persistent-storage
           persistentVolumeClaim:
             claimName: {{ include "neptune.fullname" . }}-pvc
+      initContainers:
+        - name: pvc-file-permissions
+          image: alpine:3
+          command: ["chown", "-R", "10000:10001", "{{ .Values.image.env.fileStore | default "/files" }}"]
+          volumeMounts:
+            - name: {{ include "neptune.fullname" . }}-persistent-storage
+              mountPath: "{{ .Values.image.env.fileStore | default "/files" }}"
       containers:
         - name: {{ include "neptune.fullname" . }}
           image: "{{ .Values.image.name }}:{{ .Chart.AppVersion }}"

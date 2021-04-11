@@ -10,7 +10,7 @@ maintainers:
 # Chart Info (versions)
 type: application
 version: 1.0.0
-appVersion: "0.x"
+appVersion: "test.0.x"
 
 # Chart Dependencies
 dependencies:

@@ -16,7 +16,7 @@ image:
     dbDialect: postgres
     dbNoteDatabase: studysnap_notedb
     dbPort: 5432
-    fileStore: /files/
+    fileStore: /files
 
 
 # Expose service settings
@@ -27,6 +27,7 @@ service:
 # Let's Encrypt Settings (SSL)
 ingress:
   host: studysnap.ca
+  maxRequestSize: 50m
   certManager:
     clusterIssuer: letsencrypt-prod
     tlsSecretName: ss-neptune-tls
