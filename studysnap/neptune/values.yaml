@@ -67,11 +67,6 @@ postgresql:
 # OVERRIDE AUTHENTICATIONs POSTGRESQL VALUES (authentication dep)
 authentication:
   secretName: ss-authentication
-  # TEMP (Disable startup probe)
-  startupProbe:
-    enabled: false
-  volumePermissions:
-    enabled: true
   image:
     debug: true
   postgresql:
