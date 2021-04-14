@@ -12,6 +12,7 @@ image:
   port: 7777
   env:
     maxRequests: 400
+    esPort: 9200
     dbUsername: studysnap
     dbDialect: postgres
     dbNoteDatabase: studysnap_notedb
@@ -27,7 +28,7 @@ service:
 # Let's Encrypt Settings (SSL)
 ingress:
   host: studysnap.ca
-  maxRequestSize: 50m
+  maxRequestSize: 20m
   certManager:
     clusterIssuer: letsencrypt-prod
     tlsSecretName: ss-neptune-tls

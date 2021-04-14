@@ -44,6 +44,10 @@ spec:
               value: "{{ .Values.image.env.maxRequests | default "250" }}"
             - name: DB_DIALECT
               value: "{{ .Values.image.env.dbDialect | default "postgres" }}"
+            - name: ES_HOST
+              value: "{{ include "elasticsearch.fullname" . }}"
+            - name: ES_PORT
+              value: "{{ .Values.image.env.esPort | default "9200" }}"
             - name: DB_HOST
               value: "{{ include "postgresql.fullname" . }}"
             - name: DB_PORT

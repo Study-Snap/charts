@@ -43,6 +43,13 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
+Get the host DNS name for the elasticsearch service
+*/}}
+{{- define "elasticsearch.fullname" -}}
+{{- printf "elasticsearch-master.%s.svc.cluster.local" .Values.namespace | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Get the host DNS name for the postgres database instance
 */}}
 {{- define "postgresql.fullname" -}}
