@@ -28,7 +28,7 @@ service:
 # Let's Encrypt Settings (SSL)
 ingress:
   host: studysnap.ca
-  maxRequestSize: 20m
+  maxRequestSize: "10M"
   certManager:
     clusterIssuer: letsencrypt-prod
     tlsSecretName: ss-neptune-tls
