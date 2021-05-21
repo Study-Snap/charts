@@ -26,11 +26,11 @@ service:
 
 # Let's Encrypt Settings (SSL)
 ingress:
-  host: studysnap.ca
+  host: neptune.studysnap.ca
   maxRequestSize: "10M"
   paths:
-    root: /neptune
-    docs: /neptune/docs
+    root: /
+    docs: /docs
   certManager:
     clusterIssuer: letsencrypt-prod
     tlsSecretName: ss-neptune-tls

@@ -4,6 +4,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: {{ .Values.ingress.certManager.clusterIssuer }}
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.ingress.host }}
     nginx.ingress.kubernetes.io/proxy-body-size: "{{ .Values.ingress.maxRequestSize }}"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "180"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "180"
