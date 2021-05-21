@@ -13,7 +13,6 @@ image:
   env:
     maxRequests: 400
     esPort: 9200
-    dbUsername: studysnap
     dbDialect: postgres
     dbNoteDatabase: studysnap_notedb
     dbPort: 5432
@@ -29,6 +28,9 @@ service:
 ingress:
   host: studysnap.ca
   maxRequestSize: "10M"
+  paths:
+    root: /neptune
+    docs: /neptune/docs
   certManager:
     clusterIssuer: letsencrypt-prod
     tlsSecretName: ss-neptune-tls
@@ -66,24 +68,21 @@ postgresql:
     type: ClusterIP
     port: 5432
 
-# OVERRIDE AUTHENTICATIONs POSTGRESQL VALUES (authentication dep)
-authentication:
-  secretName: ss-authentication
-  # TEMP (Disable startup probe)
-  startupProbe:
-    enabled: false
-  volumePermissions:
-    enabled: true
-  image:
-    debug: true
-  postgresql:
-    fullnameOverride: studysnap-userdb
-    global:
-      postgresql:
-        servicePort: 5432
-        postgresqlDatabase: studysnap_userdb # Note: This should match charts/authentication/values.yaml
-    postgresqlUsername: studysnap
-    existingSecret: ss-authentication
-    service:
-      type: ClusterIP
-      port: 5432
+# OVERRIDE AUTHENTICATIONs POSTGRESQL VALUES (authentication dep) (only needed if auth added as dep for neptune)
+# authentication:
+#   secretName: ss-authentication
+#   volumePermissions:
+#     enabled: true
+#   image:
+#     debug: true
+#   postgresql:
+#     fullnameOverride: studysnap-userdb
+#     global:
+#       postgresql:
+#         servicePort: 5432
+#         postgresqlDatabase: studysnap_userdb # Note: This should match charts/authentication/values.yaml
+#     postgresqlUsername: studysnap
+#     existingSecret: ss-authentication
+#     service:
+#       type: ClusterIP
+#       port: 5432

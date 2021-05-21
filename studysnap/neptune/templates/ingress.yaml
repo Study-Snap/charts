@@ -20,14 +20,14 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: /neptune
+          - path: {{ .Values.ingress.paths.root | quote }}
             pathType: Prefix
             backend:
               service:
                 name: {{ include "neptune.fullname" . }}-service
                 port:
                   number: {{ .Values.service.port }}
-          - path: /neptune/docs
+          - path: {{ .Values.ingress.paths.docs | quote }}
             pathType: Prefix
             backend:
               service:

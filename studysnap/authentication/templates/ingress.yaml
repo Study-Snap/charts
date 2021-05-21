@@ -15,14 +15,14 @@ spec:
     - host: {{ .Values.ingress.host }}
       http:
         paths:
-          - path: /auth
+          - path: {{ .Values.ingress.paths.root | quote }}
             pathType: Prefix
             backend:
               service:
                 name: {{ include "authentication.fullname" . }}-service
                 port:
                   number: {{ .Values.service.port }}
-          - path: /auth/docs
+          - path: {{ .Values.ingress.paths.docs | quote }}
             pathType: Prefix
             backend:
               service:
