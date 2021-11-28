@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "studysnap.authentication.fullname" . }}-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ include "studysnap.authentication.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "studysnap.authentication.fullname" . }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 30
+  template:
+    metadata:
+      labels:
+        app: {{ include "studysnap.authentication.fullname" . }}
+    spec:
+      restartPolicy: {{ .Values.authentication.restartPolicy }}
+      containers:
+        - name: "ss-auth"
+          image: "{{ .Values.authentication.image.name }}:{{ .Values.authentication.appVersion }}"
+          imagePullPolicy: {{ .Values.authentication.image.pullPolicy | default "Always" }}
+          env:
+            - name: PORT
+              value: "{{ .Values.authentication.image.port }}"
+            - name: MAX_REQUESTS
+              value: "{{ .Values.authentication.image.env.maxRequests | default "250" }}"
+            - name: BCRYPT_SALT_ROUNDS
+              value: "{{ .Values.image.env.bcryptSaltRounds | default "12" }}"
+            - name: DB_HOST
+              value: "{{ include "ssdb.hostname" . }}"
+            - name: DB_PORT
+              value: "{{ .Values.authentication.image.env.dbPort | default "5432" }}"
+            - name: DB_DATABASE_NAME
+              value: "{{ .Values.authentication.image.env.dbName | default "studysnap_db" }}"
+            - name: DB_RETRY_ATTEMPTS
+              value: "{{ .Values.authentication.image.env.dbRetryAttempts | default "5" }}"
+            - name: JWT_ACCESS_TOKEN_EXPIRE_TIME
+              value: "{{ .Values.authentication.image.env.jwtAccessExpireTime | default "5m" }}"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.dbCredentialsSecret }}
+                  key: postgresql-studysnap-username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.dbCredentialsSecret }}
+                  key: postgresql-password
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.jwtValidationSecret }}
+                  key: jwt-secret
+          ports:
+            - containerPort: {{ .Values.authentication.image.port }}
+          resources: {{- toYaml .Values.authentication.resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "studysnap.authentication.fullname" . }}-svc
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ include "studysnap.authentication.fullname" . }}
+spec:
+  type: {{ .Values.authentication.service.type | default "NodePort" }}
+  selector:
+    app: {{ include "studysnap.authentication.fullname" . }}
+  ports:
+    - name: http
+      port: {{ .Values.authentication.service.port }}
+      targetPort: {{ .Values.authentication.image.port }}

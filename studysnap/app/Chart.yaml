@@ -1,22 +1,20 @@
 apiVersion: v2
-name: neptune
-description: A Helm chart for StudySnap's neptune resource server
+name: Studysnap-App
+description: A Helm chart for Studysnap resources to a K8s cluster
 home: studysnap.ca
 maintainers: 
   - name: Ben Sykes
-    email: ben@sykesdev.ca
+    email: sykesb@sheridancollege.ca
     url: https://sykesdev.ca
 
 # Chart Info (versions)
 type: application
-version: 0.1.3
-appVersion: "0.x"
+version: 1.0.0
 
-# Chart Dependencies
 dependencies:
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: 10.3.1
-  - name: authentication
+  - name: el-fulltextsearch
     repository: https://study-snap.github.io/charts/
-    version: 1.0.5
+    version: 0.2.1

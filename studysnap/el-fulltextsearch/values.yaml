@@ -3,11 +3,10 @@
 # Application (global) values
 defaultNamespace: studysnap
 restartPolicy: Always
-secretName: ss-neptune
+secretName: studysnap-db-credentials
 
 logstash:
   host: "0.0.0.0"
-  secretName: ss-logstash
   secretPath: "/run/secrets/kubernetes.io/studysnap"
   secretGroup: "logstash/jdbcpassword"
   image:

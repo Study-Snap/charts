@@ -1,0 +1,100 @@
+# APPLICATION DEPLOYMENT CONFIG
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "studysnap.neptune.fullname" . }}-deployment
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ include "studysnap.neptune.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "studysnap.neptune.fullname" . }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 30
+  template:
+    metadata:
+      labels:
+        app: {{ include "studysnap.neptune.fullname" . }}
+    spec:
+      restartPolicy: {{ .Values.neptune.restartPolicy }}
+      containers:
+        - name: ss-neptune
+          image: "{{ .Values.neptune.image.name }}:{{ .Values.neptune.appVersion }}"
+          imagePullPolicy: {{ .Values.neptune.image.pullPolicy | default "Always" }}
+          env:
+            - name: PORT
+              value: "{{ .Values.neptune.image.port }}"
+            - name: MAX_REQUESTS
+              value: "{{ .Values.neptune.image.env.maxRequests | default "250" }}"
+            - name: DB_HOST
+              value: "{{ include "ssdb.hostname" . }}"
+            - name: DB_PORT
+              value: "{{ .Values.neptune.image.env.dbPort | default "5432" }}"
+            - name: DB_DATABASE_NAME
+              value: "{{ .Values.neptune.image.env.dbName | default "studysnap_db" }}"
+            - name: DB_RETRY_ATTEMPTS
+              value: "{{ .Values.neptune.image.env.dbRetryAttempts | default "5" }}"
+            - name: ES_HOST
+              value: "{{ include "elasticsearch.hostname" }}"
+            - name: ES_PORT
+              value: "{{ .Values.neptune.image.env.esPort | default 9200 }}"
+            - name: SPACES_ENDPOINT
+              value: "{{ .Values.neptune.image.env.spacesEndpoint | default "nyc3.digitaloceanspaces.com" }}"
+            - name: NOTE_DATA_SPACE
+              value: "{{ .Values.neptune.image.env.noteDataSpace | default "notesdata" }}"
+            - name: IMAGE_DATA_SPACE
+              value: "{{ .Values.neptune.image.env.imageDataSpace | default "ssimages" }}"
+            - name: CLASS_THUMBNAIL_DEFAULT_URI
+              value: "{{ .Values.neptune.image.env.classThumbnailDefaultUri | default "classthumb.jpg" }}"
+            - name: PROFILE_IMAGE_DEFAULT_URI
+              value: "{{ .Values.neptune.image.env.profileImageDefaultUri | default "profile.jpg" }}"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.dbCredentialsSecret }}
+                  key: postgresql-studysnap-username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.dbCredentialsSecret }}
+                  key: postgresql-password
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.jwtValidationSecret }}
+                  key: jwt-secret
+            - name: SPACES_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.spacesSecret }}
+                  key: spaces-key
+            - name: SPACES_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.spacesSecret }}
+                  key: spaces-secret
+          ports:
+            - containerPort: {{ .Values.neptune.image.port }}
+          resources: {{- toYaml .Values.neptune.resources | nindent 12 }}
+---
+# SERVICE TO EXPOSE APPLICATION
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "studysnap.neptune.fullname" . }}-svc
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ include "studysnap.neptune.fullname" . }}
+spec:
+  type: {{ .Values.neptune.service.type | default "NodePort" }}
+  selector:
+    app: {{ include "studysnap.neptune.fullname" . }}
+  ports:
+    - name: http
+      port: {{ .Values.neptune.service.port }}
+      targetPort: {{ .Values.neptune.image.port}}
