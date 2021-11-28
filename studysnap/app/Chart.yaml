@@ -15,6 +15,3 @@ dependencies:
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: 10.3.1
-  - name: el-fulltextsearch
-    repository: https://study-snap.github.io/charts/
-    version: 0.2.1
