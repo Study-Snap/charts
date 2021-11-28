@@ -1,0 +1,98 @@
+# Default values for neptune chart
+
+# Application Settings
+fullnameOverride: studysnap-app
+namespace: studysnap
+
+# Secrets (required)
+dbCredentialsSecret: studysnap-db-credentials
+jwtValidationSecret: studysnap-jwt-secret
+spacesSecret: studysnap-spaces-credentials
+
+# Let's Encrypt Settings (SSL)
+ingress:
+  host: studysnap.ca
+  certManager:
+    clusterIssuer: letsencrypt-prod
+    tlsSecretName: studysnap-tls-prod
+
+# Database Settings
+postgresql:
+  fullnameOverride: studysnap-pg-db
+  global:
+    postgresql:
+      servicePort: 5432
+      postgresqlDatabase: studysnap_db
+  postgresqlUsername: studysnap
+  existingSecret: studysnap-db-credentials
+  service:
+    type: ClusterIP
+    port: 5432
+
+# Neptune Settings
+neptune:
+  appVersion: "0.3.3"
+
+  # Image Settings
+  image:
+    name: studysnap/neptune
+    pullPolicy: Always
+    port: 7777
+    env:
+      maxRequests: 1250
+      esPort: 9200
+      dbName: studysnap_db
+      dbRetryAttempts: 10
+      dbPort: 5432
+      spacesEndpoint: "nyc3.digitaloceanspaces.com"
+      noteDataSpace: notesdata
+      imageDataSpace: ssimages
+      classThumbnailDefaultUri: classthumb.jpg
+      profileImageDefaultUri: profile.jpg
+
+  # Expose service settings
+  service:
+    type: ClusterIP
+    port: 6000
+
+  # Override the resource configuration for read replicas
+  restartPolicy: Always
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "512Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1024Mi"
+
+# Authentication Settings
+authentication:
+  appVersion: "1.0.4"
+  
+  # Image Settings
+  image:
+    name: studysnap/authentication
+    pullPolicy: Always
+    port: 5555
+    env:
+      maxRequests: 1250
+      bcryptSaltRounds: 100000
+      dbPort: 5432
+      dbName: studysnap_db
+      dbRetryAttempts: 10
+      jwtAccessExpireTime: 5m
+
+  # Expose service settings
+  service:
+    type: ClusterIP
+    port: 5000
+
+  # Override the resource configuration for read replicas
+  restartPolicy: Always
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "512Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"

@@ -30,12 +30,12 @@ spec:
               name: "{{ include "el-fulltextsearch.fullname" . }}-lscm-pl"
           - name: "{{ include "el-fulltextsearch.fullname" . }}-lspassv"
             secret:
-              secretName: "{{ .Values.logstash.secretName }}"
+              secretName: "{{ .Values.secretName }}"
               items:
-                - key: jdbc-password
+                - key: postgresql-password
                   path: "{{ .Values.logstash.secretGroup }}"
       containers:
-        - name: {{ .Release.Name }}-logstash
+        - name: ss-logstash
           image: "{{ .Values.logstash.image.name }}:{{ .Values.logstash.image.tag }}"
           imagePullPolicy: {{ .Values.logstash.image.pullPolicy | default "Always" }}
           env:
@@ -55,12 +55,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secretName }}
-                  key: DB_USER
+                  key: postgresql-studysnap-username
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.secretName }}
-                  key: DB_PASS
+                  key: postgresql-password
           volumeMounts:
             - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-lsv
               mountPath: /usr/share/logstash/config/
