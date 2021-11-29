@@ -2,6 +2,24 @@ apiVersion: v1
 entries:
   Studysnap-App:
   - apiVersion: v2
+    created: "2021-11-29T14:21:11.166820047Z"
+    dependencies:
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.3.1
+    description: A Helm chart for Studysnap resources to a K8s cluster
+    digest: f4c2b46d6069cd38d4b9fddbf356d231a48ce886945931c9c4018a03f502a269
+    home: studysnap.ca
+    maintainers:
+    - email: sykesb@sheridancollege.ca
+      name: Ben Sykes
+      url: https://sykesdev.ca
+    name: Studysnap-App
+    type: application
+    urls:
+    - https://github.com/Study-Snap/charts/releases/download/Studysnap-App-1.0.1/Studysnap-App-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
     created: "2021-11-28T21:28:15.273189084Z"
     dependencies:
     - name: postgresql
@@ -161,6 +179,21 @@ entries:
   el-fulltextsearch:
   - apiVersion: v2
     appVersion: 1.x
+    created: "2021-11-29T14:21:11.305377888Z"
+    dependencies:
+    - name: elasticsearch
+      repository: https://helm.elastic.co
+      version: 7.11.2
+    description: A Helm chart to deploy a fulltext search elastic search index that
+      is synchronized with logstash to postgres database
+    digest: d11d2d146324604d8141865ee7cde7be57680145aa12db5992c120d85a2e13ba
+    name: el-fulltextsearch
+    type: application
+    urls:
+    - https://github.com/Study-Snap/charts/releases/download/el-fulltextsearch-0.2.2/el-fulltextsearch-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
+    appVersion: 1.x
     created: "2021-11-28T21:28:15.455375669Z"
     dependencies:
     - name: elasticsearch
@@ -263,4 +296,4 @@ entries:
     urls:
     - https://github.com/Study-Snap/charts/releases/download/neptune-0.1.0/neptune-0.1.0.tgz
     version: 0.1.0
-generated: "2021-11-28T21:28:15.455426069Z"
+generated: "2021-11-29T14:21:11.305753429Z"
