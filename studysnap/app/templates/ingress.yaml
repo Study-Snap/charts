@@ -1,31 +1,49 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  name: {{ include "studysnap.fullname" . }}-ingress
+  namespace: {{ .Release.Namespace }}
+  labels: {{ include "studysnap.labels" . | nindent 12 }}
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: {{ .Values.ingress.certManager.clusterIssuer }}
-  name: {{ include "neptune.fullname" . }}-ingress
-  namespace: {{ .Values.namespace }}
 spec:
   tls:
     - hosts:
       - {{ .Values.ingress.host }}
       secretName: {{ .Values.ingress.certManager.tlsSecretName }}
   rules:
-    - host: {{ .Values.ingress.host }}
+    - host: {{ .Values.ingress.neptuneSubdomain }}
       http:
         paths:
-          - path: /neptune
+          - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ include "neptune.fullname" . }}-service
+                name: {{ include "studysnap.neptune.fullname" . }}-svc
                 port:
-                  number: {{ .Values.service.port }}
-          - path: /neptune/docs
+                  number: {{ .Values.neptune.service.port }}
+          - path: /docs
             pathType: Prefix
             backend:
               service:
-                name: {{ include "neptune.fullname" . }}-service
+                name: {{ include "studysnap.neptune.fullname" . }}-svc
                 port:
-                  number: {{ .Values.service.port }}
+                  number: {{ .Values.neptune.service.port }}
+    - host: {{ .Values.ingress.authSubdomain }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "studysnap.authentication.fullname" . }}-svc
+                port:
+                  number: {{ .Values.authentication.service.port }}
+          - path: /docs
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "studysnap.authentication.fullname" . }}-svc
+                port:
+                  number: {{ .Values.authentication.service.port }}

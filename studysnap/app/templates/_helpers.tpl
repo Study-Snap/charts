@@ -20,14 +20,16 @@ If release name contains chart name it will be used as a full name.
 Creates an app string for the authentication app (service)
 */}}
 {{- define "studysnap.authentication.fullname" -}}
-{{- printf "%s-%s" include "studysnap.fullname" . "auth" }}
+{{- $fullName := include "studysnap.fullname" . -}}
+{{- printf "%s-%s" $fullName "auth" }}
 {{- end }}
 
 {{/*
 Creates an app string for the neptune app (service)
 */}}
 {{- define "studysnap.neptune.fullname" -}}
-{{- printf "%s-%s" include "studysnap.fullname" . "neptune" }}
+{{- $fullName := include "studysnap.fullname" . -}}
+{{- printf "%s-%s" $fullName "neptune" }}
 {{- end }}
 
 {{/*

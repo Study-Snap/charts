@@ -14,7 +14,7 @@ spec:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
-  minReadySeconds: 30
+  minReadySeconds: 45
   template:
     metadata:
       labels:
@@ -31,7 +31,7 @@ spec:
             - name: MAX_REQUESTS
               value: "{{ .Values.authentication.image.env.maxRequests | default "250" }}"
             - name: BCRYPT_SALT_ROUNDS
-              value: "{{ .Values.image.env.bcryptSaltRounds | default "12" }}"
+              value: "{{ .Values.authentication.image.env.bcryptSaltRounds | default "12" }}"
             - name: DB_HOST
               value: "{{ include "ssdb.hostname" . }}"
             - name: DB_PORT

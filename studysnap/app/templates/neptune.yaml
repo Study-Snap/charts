@@ -40,7 +40,7 @@ spec:
             - name: DB_RETRY_ATTEMPTS
               value: "{{ .Values.neptune.image.env.dbRetryAttempts | default "5" }}"
             - name: ES_HOST
-              value: "{{ include "elasticsearch.hostname" }}"
+              value: "{{ include "elasticsearch.hostname" . }}"
             - name: ES_PORT
               value: "{{ .Values.neptune.image.env.esPort | default 9200 }}"
             - name: SPACES_ENDPOINT

@@ -12,6 +12,8 @@ spacesSecret: studysnap-spaces-credentials
 # Let's Encrypt Settings (SSL)
 ingress:
   host: studysnap.ca
+  neptuneSubdomain: neptune.studysnap.ca
+  authSubdomain: auth.studysnap.ca
   certManager:
     clusterIssuer: letsencrypt-prod
     tlsSecretName: studysnap-tls-prod
@@ -19,10 +21,7 @@ ingress:
 # Database Settings
 postgresql:
   fullnameOverride: studysnap-pg-db
-  global:
-    postgresql:
-      servicePort: 5432
-      postgresqlDatabase: studysnap_db
+  postgresqlDatabase: studysnap_db
   postgresqlUsername: studysnap
   existingSecret: studysnap-db-credentials
   service:
