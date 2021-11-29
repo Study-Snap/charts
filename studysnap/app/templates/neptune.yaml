@@ -87,6 +87,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "studysnap.neptune.fullname" . }}-svc
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: neptune.studysnap.ca
   namespace: {{ .Release.Namespace }}
   labels:
     app: {{ include "studysnap.neptune.fullname" . }}

@@ -11,6 +11,8 @@ spec:
   tls:
     - hosts:
       - {{ .Values.ingress.host }}
+      - {{ .Values.ingress.neptuneSubdomain }}
+      - {{ .Values.ingress.authSubdomain }}
       secretName: {{ .Values.ingress.certManager.tlsSecretName }}
   rules:
     - host: {{ .Values.ingress.neptuneSubdomain }}

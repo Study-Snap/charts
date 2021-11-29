@@ -75,7 +75,7 @@ authentication:
     port: 5555
     env:
       maxRequests: 1250
-      bcryptSaltRounds: 100000
+      bcryptSaltRounds: 12
       dbPort: 5432
       dbName: studysnap_db
       dbRetryAttempts: 10
