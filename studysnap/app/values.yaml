@@ -30,7 +30,7 @@ postgresql:
 
 # Neptune Settings
 neptune:
-  appVersion: "0.3.3"
+  appVersion: "0.x"
 
   # Image Settings
   image:
@@ -66,7 +66,7 @@ neptune:
 
 # Authentication Settings
 authentication:
-  appVersion: "1.0.4"
+  appVersion: "1.x"
   
   # Image Settings
   image:
