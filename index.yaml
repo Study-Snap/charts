@@ -2,6 +2,24 @@ apiVersion: v1
 entries:
   Studysnap-App:
   - apiVersion: v2
+    created: "2021-11-30T00:02:35.655472527Z"
+    dependencies:
+    - name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 10.3.1
+    description: A Helm chart for Studysnap resources to a K8s cluster
+    digest: 98f826a23c706ca263327c0a08b2633981edf63bca1c4ba5fe9bb0c314d0c5c9
+    home: studysnap.ca
+    maintainers:
+    - email: sykesb@sheridancollege.ca
+      name: Ben Sykes
+      url: https://sykesdev.ca
+    name: Studysnap-App
+    type: application
+    urls:
+    - https://github.com/Study-Snap/charts/releases/download/Studysnap-App-1.1.0/Studysnap-App-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
     created: "2021-11-29T20:22:45.663684691Z"
     dependencies:
     - name: postgresql
@@ -329,4 +347,4 @@ entries:
     urls:
     - https://github.com/Study-Snap/charts/releases/download/neptune-0.1.0/neptune-0.1.0.tgz
     version: 0.1.0
-generated: "2021-11-29T20:22:45.870869594Z"
+generated: "2021-11-30T00:02:35.655637127Z"
