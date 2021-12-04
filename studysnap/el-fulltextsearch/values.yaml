@@ -1,7 +1,6 @@
 # Default values for the chart
 
 # Application (global) values
-defaultNamespace: studysnap
 restartPolicy: Always
 secretName: studysnap-db-credentials
 
@@ -16,8 +15,9 @@ logstash:
   resources: {}
 
 database:
-  name: studysnap_notedb
+  hostname: studysnap-pg-db
   port: 5432
+  name: studysnap_db
 
 es:
   port: 9200

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "el-fulltextsearch.fullname" . }}-deployment
-  namespace: {{ .Values.defaultNamespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: {{ include "el-fulltextsearch.fullname" . }}
 spec:
@@ -40,7 +40,7 @@ spec:
           imagePullPolicy: {{ .Values.logstash.image.pullPolicy | default "Always" }}
           env:
             - name: DB_HOST
-              value: "{{ include "postgresql.fullname" . }}"
+              value: "{{ include "ssdb.fullname" . }}"
             - name: DB_PORT
               value: "{{ .Values.database.port }}"
             - name: DB_NAME

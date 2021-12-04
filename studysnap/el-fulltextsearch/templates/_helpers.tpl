@@ -64,13 +64,13 @@ Create the name of the service account to use
 {{/*
 Get the host DNS name for the notes postgres database instance
 */}}
-{{- define "postgresql.fullname" -}}
-{{- printf "%s-notedb.%s.svc.cluster.local" .Values.defaultNamespace .Values.defaultNamespace | trunc 63 | trimSuffix "-" -}}
+{{- define "ssdb.fullname" -}}
+{{- printf "%s.%s.svc.cluster.local" .Values.database.hostname .Release.Namespace | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Get the host DNS name for the notes elasticsearch index
 */}}
 {{- define "elasticsearch.fullname" -}}
-{{- printf "elasticsearch-master.%s.svc.cluster.local" .Values.defaultNamespace | trunc 63 | trimSuffix "-" -}}
+{{- printf "elasticsearch-master.%s.svc.cluster.local" .Release.Namespace | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
