@@ -233,6 +233,21 @@ entries:
   el-fulltextsearch:
   - apiVersion: v2
     appVersion: 1.x
+    created: "2021-12-04T22:10:53.784235355Z"
+    dependencies:
+    - name: elasticsearch
+      repository: https://helm.elastic.co
+      version: 7.11.2
+    description: A Helm chart to deploy a fulltext search elastic search index that
+      is synchronized with logstash to postgres database
+    digest: 3cf283fa4f300d498e8d6bfcdb186428345eb3a7ba37f98a314d0ea7b58323a9
+    name: el-fulltextsearch
+    type: application
+    urls:
+    - https://github.com/Study-Snap/charts/releases/download/el-fulltextsearch-0.2.4/el-fulltextsearch-0.2.4.tgz
+    version: 0.2.4
+  - apiVersion: v2
+    appVersion: 1.x
     created: "2021-11-29T20:22:45.87080609Z"
     dependencies:
     - name: elasticsearch
@@ -365,4 +380,4 @@ entries:
     urls:
     - https://github.com/Study-Snap/charts/releases/download/neptune-0.1.0/neptune-0.1.0.tgz
     version: 0.1.0
-generated: "2021-11-30T00:29:19.236098999Z"
+generated: "2021-12-04T22:10:53.784290555Z"
