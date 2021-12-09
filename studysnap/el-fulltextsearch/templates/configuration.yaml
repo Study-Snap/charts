@@ -36,3 +36,11 @@ metadata:
 data:
   elasticsearch.yaml: |
     discovery.type: single-node
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-template-script-raw
+  namespace: {{ .Release.Namespace }}
+data:
+  template.sh: {{ tpl (.Files.Get "files/scripts/elastic-customizer.sh") . | quote }}
