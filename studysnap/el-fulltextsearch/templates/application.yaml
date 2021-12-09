@@ -22,6 +22,12 @@ spec:
     spec:
       restartPolicy: {{ .Values.restartPolicy }}
       volumes:
+          - name: elasticsearch-template-script
+            configMap:
+              name: elasticsearch-template-script-raw
+              defaultMode: 0755
+          - name: pre-install
+            emptyDir: {}
           - name: {{ include "el-fulltextsearch.fullname" . }}-lscm-lsv
             configMap:
               name: "{{ include "el-fulltextsearch.fullname" . }}-lscm-ls"
@@ -34,6 +40,22 @@ spec:
               items:
                 - key: postgresql-password
                   path: "{{ .Values.logstash.secretGroup }}"
+      initContainers:
+        - name: es-config-sidecar
+          image: bash:latest
+          imagePullPolicy: Always
+          env:
+            - name: ES_HOST
+              value: "{{ include "elasticsearch.fullname" . }}"
+            - name: ES_PORT
+              value: "{{ .Values.es.port }}"
+          command: ["bash"]
+          args: ["-c", "/util/template.sh"]
+          volumeMounts:
+            - name: elasticsearch-template-script
+              mountPath: /util
+            - name: pre-install
+              mountPath: /pre-install
       containers:
         - name: ss-logstash
           image: "{{ .Values.logstash.image.name }}:{{ .Values.logstash.image.tag }}"
